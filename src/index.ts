@@ -24,7 +24,14 @@ export default function (app: any) {
     start: function (properties: any) {
       props = properties
 
-      props.banks?.forEach((bank: any) => {
+      if ( !props?.banks || !props.banks.length ) {
+        return
+      }
+
+      props.banks.forEach((bank: any) => {
+        if ( !bank.switches || !bank.switches.length ) {
+          return
+        }
         switchBanks[bank.instance] = bank.switches
         app.subscriptionmanager.subscribe(
           {
@@ -105,7 +112,7 @@ export default function (app: any) {
 
     schema: () => {
       let paths = app.streambundle.getAvailablePaths()
-          .filter((path:any) => path.startsWith('xelectrical.switches.') && path.endsWith('.state'))
+          .filter((path:any) => path.startsWith('electrical.switches.') && path.endsWith('.state'))
       
       if ( props ) {
         props.banks?.forEach((bank:any) => {
@@ -161,7 +168,8 @@ export default function (app: any) {
   function makeBinaryStatusReport (bank: any) {
     const pgn: any = {
       pgn: 127501,
-      'Switch Bank Instance': bank.instance
+      'Switch Bank Instance': bank.instance,
+      "Instance": bank.instance
     }
     bank.switches?.forEach((sw: any, index: number) => {
       const value = app.getSelfPath(sw)
