@@ -1,7 +1,7 @@
 {
   "name": "signalk-n2k-switching-emulator",
   "version": "1.0.0",
-  "description": "Signal K Plugin which makes exist switches in sk available as n2k switches",
+  "description": "Signal K Plugin which makes existing switches in sk available as n2k switches",
   "main": "index.js",
   "scripts": {
     "format": "prettier-standard 'src/*.ts'",
@@ -11,7 +11,8 @@
     "release": "git tag -d v$npm_package_version ; git tag v$npm_package_version && git push --tags && git push && npm run create-release"
   },
   "keywords": [
-    "signalk-node-server-plugin"
+    "signalk-node-server-plugin",
+    "signalk-category-digital-switching"
   ],
   "author": "scott@scottbender.net",
   "license": "Apache-2.0",

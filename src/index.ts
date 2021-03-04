@@ -108,7 +108,7 @@ export default function (app: any) {
     id: 'signalk-n2k-switching-emulator',
     name: 'NMEA 2000 Siwtching Emulator',
     description:
-      'Signal K Plugin which makes exist switches in sk available as n2k switches',
+      'Signal K Plugin which makes existing switches in sk available as n2k switches',
 
     schema: () => {
       let paths = app.streambundle.getAvailablePaths()
