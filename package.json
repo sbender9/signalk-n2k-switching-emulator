@@ -12,7 +12,8 @@
   },
   "keywords": [
     "signalk-node-server-plugin",
-    "signalk-category-digital-switching"
+    "signalk-category-digital-switching",
+    "signalk-category-nmea-2000"
   ],
   "author": "scott@scottbender.net",
   "license": "Apache-2.0",
