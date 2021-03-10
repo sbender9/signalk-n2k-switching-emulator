@@ -112,7 +112,7 @@ export default function (app: any) {
 
     schema: () => {
       let paths = app.streambundle.getAvailablePaths()
-          .filter((path:any) => path.startsWith('electrical.switches.') && path.endsWith('.state'))
+          .filter((path:any) => path && path.startsWith('electrical.switches.') && path.endsWith('.state'))
       
       if ( props ) {
         props.banks?.forEach((bank:any) => {
