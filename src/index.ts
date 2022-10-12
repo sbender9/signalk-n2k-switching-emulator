@@ -74,7 +74,7 @@ export default function (app: any) {
       const n2kCallback = (msg: any) => {
         try {
           if (msg.pgn == 127502) {
-            const instance = msg.fields['Switch Bank Instance']
+            const instance = msg.fields['Instance']
             const paths = switchBanks[instance]
             if (paths) {
               debug('msg: ' + JSON.stringify(msg))
