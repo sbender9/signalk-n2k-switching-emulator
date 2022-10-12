@@ -1,6 +1,6 @@
 {
   "name": "signalk-n2k-switching-emulator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Signal K Plugin which makes existing switches in sk available as n2k switches",
   "main": "index.js",
   "scripts": {
