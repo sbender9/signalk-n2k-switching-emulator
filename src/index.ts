@@ -55,7 +55,7 @@ export default function (app: any) {
 
             delta.updates?.forEach((update: any) => {
               update.values?.forEach((vp: any) => {
-                ;(pgn as any)[`indicator${bank.switches.indexOf(vp.path) + 1}`] =
+                ;(pgn.fields as any)[`indicator${bank.switches.indexOf(vp.path) + 1}`] =
                   vp.value === 1 || vp.value === true ? 'On' : 'Off'
               })
             })
@@ -67,7 +67,8 @@ export default function (app: any) {
         if (bank.sendRate) {
           const interval = setInterval(
             () => {
-              const pgn = makeBinaryStatusReport(bank)
+              let pgn = makeBinaryStatusReport(bank)
+              pgn = needsCamelMapping ? mapCamelCaseKeys(pgn) : pgn
               debug('sending update %j', pgn)
               app.emit('nmea2000JsonOut', pgn)
             },
@@ -80,7 +81,8 @@ export default function (app: any) {
       const n2kCallback = (msg: any) => {
         try {
           if (msg.pgn == 127502) {
-            const instance = msg.fields['Instance']
+            const camel = msg.fields['instance']
+            const instance = camel !== undefined ? camel : msg.fields['Instance'] 
             const paths = switchBanks[instance]
             if (paths) {
               debug('msg: ' + JSON.stringify(msg))
@@ -180,7 +182,7 @@ export default function (app: any) {
     bank.switches?.forEach((sw: any, index: number) => {
       const value = app.getSelfPath(sw)
       if (value && typeof value.value !== 'undefined') {
-        ;(pgn as any)[`indicator${index + 1}`] =
+        ;(pgn.fields as any)[`indicator${index + 1}`] =
           value.value === 1 || value.value === true ? 'On' : 'Off'
       }
     })
