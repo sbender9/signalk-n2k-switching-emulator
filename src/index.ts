@@ -13,12 +13,17 @@
  * limitations under the License.
  */
 
+import { PGN_127502, PGN_127501, mapCamelCaseKeys } from '@canboat/ts-pgns'
+import { satisfies } from 'semver'
+
 export default function (app: any) {
   const error = app.error
   const debug = app.debug
   let props: any
   let onStop: any = []
   let switchBanks: any = {}
+
+  const needsCamelMapping = !satisfies(app.config.version, '>=2.15.0')
 
   const plugin: Plugin = {
     start: function (properties: any) {
@@ -46,14 +51,15 @@ export default function (app: any) {
             app.setProviderError(err)
           },
           (delta: any) => {
-            const pgn = makeBinaryStatusReport(bank)
+            let pgn = makeBinaryStatusReport(bank)
 
             delta.updates?.forEach((update: any) => {
               update.values?.forEach((vp: any) => {
-                pgn[`Indicator${bank.switches.indexOf(vp.path) + 1}`] =
+                ;(pgn as any)[`indicator${bank.switches.indexOf(vp.path) + 1}`] =
                   vp.value === 1 || vp.value === true ? 'On' : 'Off'
               })
             })
+            pgn = needsCamelMapping ? mapCamelCaseKeys(pgn) : pgn
             debug('sending %j', pgn)
             app.emit('nmea2000JsonOut', pgn)
           }
@@ -80,7 +86,8 @@ export default function (app: any) {
               debug('msg: ' + JSON.stringify(msg))
 
               for (let i = 1; i < 29; i++) {
-                const val = msg.fields[`Switch${i}`]
+                const lowerVal = msg.fields[`switch${i}`]
+                const val = lowerVal !== undefined ? lowerVal : msg.fields[`Switch${i}`]
                 if (typeof val !== 'undefined') {
                   if (paths.length < i - 1) {
                     error(`no path for switch ${i} bank ${instance}`)
@@ -166,15 +173,14 @@ export default function (app: any) {
   }
   
   function makeBinaryStatusReport (bank: any) {
-    const pgn: any = {
-      pgn: 127501,
-      'Switch Bank Instance': bank.instance,
-      "Instance": bank.instance
-    }
+    const pgn = new PGN_127501({
+      instance: bank.instance
+    })
+    
     bank.switches?.forEach((sw: any, index: number) => {
       const value = app.getSelfPath(sw)
       if (value && typeof value.value !== 'undefined') {
-        pgn[`Indicator${index + 1}`] =
+        ;(pgn as any)[`indicator${index + 1}`] =
           value.value === 1 || value.value === true ? 'On' : 'Off'
       }
     })
