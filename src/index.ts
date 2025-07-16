@@ -59,7 +59,7 @@ export default function (app: any) {
                   vp.value === 1 || vp.value === true ? 'On' : 'Off'
               })
             })
-            pgn = needsCamelMapping ? mapCamelCaseKeys(pgn) : pgn
+            pgn = needsCamelMapping ? mapCamelCaseKeys(pgn) as PGN_127501: pgn
             debug('sending %j', pgn)
             app.emit('nmea2000JsonOut', pgn)
           }
@@ -68,7 +68,7 @@ export default function (app: any) {
           const interval = setInterval(
             () => {
               let pgn = makeBinaryStatusReport(bank)
-              pgn = needsCamelMapping ? mapCamelCaseKeys(pgn) : pgn
+              pgn = needsCamelMapping ? mapCamelCaseKeys(pgn) as PGN_127501 : pgn
               debug('sending update %j', pgn)
               app.emit('nmea2000JsonOut', pgn)
             },
