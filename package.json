@@ -7,6 +7,7 @@
     "format": "prettier-standard 'src/*.ts'",
     "build": "tsc",
     "watch": "npm run build -- -w",
+    "test": "npm run build && node test/czone.test.mjs && node test/integration.test.mjs && node test/zcf.test.mjs && node test/zcf-encoder.test.mjs && node test/emulator.test.mjs",
     "create-release": "github-create-release --owner sbender9 --repository signalk-n2k-switching-emulator",
     "release": "git tag -d v$npm_package_version ; git tag v$npm_package_version && git push --tags && git push && npm run create-release"
   },
@@ -22,6 +23,7 @@
     "url": "https://github.com/sbender9/signalk-n2k-switching-emulator"
   },
   "devDependencies": {
+    "@canboat/canboatjs": "^3.16.4",
     "@signalk/github-create-release": "^1.2.1",
     "@types/node": "^14.14.10",
     "@types/semver": "^7.7.0",
@@ -29,7 +31,7 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
-    "@canboat/ts-pgns": "^1.8.0",
+    "@canboat/ts-pgns": "^1.11.16-beta.1",
     "semver": "^7.7.2"
   }
 }
